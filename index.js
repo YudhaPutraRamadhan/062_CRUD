@@ -29,7 +29,7 @@ db.connect((err) => {
 });
 
 app.get('/api/users', (req, res) => {
-    db.query('SELECT * FROM users', (err, results) => {
+    db.query('SELECT * FROM mahasiswa', (err, results) => {
         if (err) {
             console.error('Error executing query:', err.stack);
             res.status(500).send('Error fetching users');
@@ -39,14 +39,14 @@ app.get('/api/users', (req, res) => {
     });
 });
 
-app.post('api/users', (req, res) => {
+app.post('/api/users', (req, res) => {
     const { nama, nim, kelas} = req.body;
 
     if (!nama || !nim || !kelas) {
         return res.status(400).json({ message: 'nama, nim, kelas wajib diisi' });
     }
 
-    db.query('INSERT INTO users (nama, nim, kelas) VALUES (?, ?, ?)', 
+    db.query('INSERT INTO Mahasiswa (nama, nim, kelas) VALUES (?, ?, ?)', 
         [nama, nim, kelas], 
         (err, result) => {
             if (err) {
@@ -62,7 +62,7 @@ app.put('/api/users/:id', (req, res) => {
     const userId = req.params.id;
     const { nama, nim, kelas } = req.body;
     db.query(
-        'UPDATE Mahasiswa SET nama = ?, nim = ?, kelas = ? WHERE id = ?',
+        'UPDATE mahasiswa SET nama = ?, nim = ?, kelas = ? WHERE id = ?',
         [nama, nim, kelas, userId],
         (err, result) => {
             if (err) {
@@ -77,7 +77,7 @@ app.put('/api/users/:id', (req, res) => {
 app.delete('/api/users/:id', (req, res) => {
     const userId = req.params.id;
     db.query(
-        'DELETE FROM users WHERE id = ?',
+        'DELETE FROM mahasiswa WHERE id = ?',
         [userId],
         (err, result) => {
             if (err) {
