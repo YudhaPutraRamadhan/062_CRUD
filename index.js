@@ -38,3 +38,22 @@ app.get('/api/users', (req, res) => {
         res.json(results);
     });
 });
+
+app.post('api/users', (req, res) => {
+    const { nama, nim, kelas} = req.body;
+
+    if (!nama || !nim || !kelas) {
+        return res.status(400).json({ message: 'nama, nim, kelas wajib diisi' });
+    }
+
+    db.query('INSERT INTO users (nama, nim, kelas) VALUES (?, ?, ?)', 
+        [nama, nim, kelas], 
+        (err, result) => {
+            if (err) {
+                console.error('Error executing query:', err.stack);
+                return res.status(500).json({ message: 'Database Error' });
+            }
+            res.status(201).json({ message: 'User added successfully', userId: result.insertId });
+        }
+    );
+});
